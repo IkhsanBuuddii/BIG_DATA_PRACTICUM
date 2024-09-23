@@ -1,0 +1,4 @@
+Tafrikhan,20,3.5
+Roekhan,20,3.4
+Deska,21,3.4
+Ikhsan,20,3.6
