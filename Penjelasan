@@ -1,0 +1,93 @@
+1. **Menginstal library yang diperlukan**:
+   ```python
+   !pip install pyspark pandas
+   ```
+   Ini adalah perintah untuk menginstal `pyspark` dan `pandas` menggunakan pip di Google Colab. `pyspark` digunakan untuk analisis data besar dengan framework Spark, dan `pandas` digunakan untuk manipulasi data dalam format tabular.
+
+2. **Menginisialisasi SparkSession**:
+   ```python
+   from pyspark.sql import SparkSession
+   from pyspark.sql.functions import col, dayofmonth, month, year, to_date
+
+   # Initialize a Spark session
+   spark = SparkSession.builder.appName("SalesDataAnalysis").getOrCreate()
+   ```
+   `SparkSession` adalah titik awal untuk bekerja dengan Spark. Baris ini membuat sesi baru dengan nama aplikasi "SalesDataAnalysis". Library `pyspark.sql.functions` digunakan untuk memanggil fungsi-fungsi yang diperlukan dalam transformasi data.
+
+3. **Membuat DataFrame**:
+   ```python
+   data = [
+       ("P001", "Product A", "Electronics", 10, 200, "2022-01-10"),
+       ("P002", "Product B", "Electronics", 30, 150, "2022-02-11"),
+       ...
+   ]
+   columns = ["ProductID", "ProductName", "Category", "Quantity", "Price", "Date"]
+   df = spark.createDataFrame(data, columns)
+   ```
+   Data produk dalam bentuk list of tuples dikonversi menjadi DataFrame Spark dengan kolom yang ditentukan (`ProductID`, `ProductName`, `Category`, dll.).
+
+4. **Mengonversi kolom 'Date' menjadi tipe tanggal dan mengekstrak hari, bulan, tahun**:
+   ```python
+   df = df.withColumn("Date", to_date(col("Date")))
+   df = df.withColumn("Day", dayofmonth(col("Date"))) \
+          .withColumn("Month", month(col("Date"))) \
+          .withColumn("Year", year(col("Date")))
+   ```
+   Fungsi `to_date` mengubah kolom "Date" menjadi tipe tanggal. Lalu, fungsi `dayofmonth`, `month`, dan `year` digunakan untuk mengekstrak informasi hari, bulan, dan tahun dari kolom tanggal tersebut.
+
+5. **Menghapus kolom 'Date'**:
+   ```python
+   df = df.drop("Date")
+   ```
+   Kolom "Date" asli dihapus karena informasi hari, bulan, dan tahun sudah diekstraksi.
+
+6. **Menghitung total pendapatan (TotalRevenue)**:
+   ```python
+   df = df.withColumn("TotalRevenue", col("Quantity") * col("Price"))
+   ```
+   Total pendapatan dihitung dengan mengalikan `Quantity` dengan `Price` dan disimpan dalam kolom baru `TotalRevenue`.
+
+7. **Mengelompokkan data berdasarkan tahun, bulan, dan kategori untuk menghitung total pendapatan**:
+   ```python
+   monthly_revenue = df.groupBy("Year", "Month", "Category") \
+       .agg(sum("TotalRevenue").alias("TotalRevenue")) \
+       .orderBy("Year", "Month", "Category")
+   ```
+   Data dikelompokkan berdasarkan tahun, bulan, dan kategori, kemudian total pendapatan untuk setiap grup dihitung menggunakan fungsi `sum`. Data kemudian diurutkan berdasarkan tahun, bulan, dan kategori.
+
+8. **Mencari produk dengan harga terendah dalam setiap kategori**:
+   ```python
+   lowest_price_products = df.groupBy("Category") \
+       .agg({"Price": "min"}) \
+       .join(df, (df["Price"] == col("min(Price)")) & (df["Category"] == col("Category"))) \
+       .select("Category", "ProductName", "Price")
+   ```
+   Pertama, harga minimum di setiap kategori dihitung. Kemudian, DataFrame digabungkan dengan DataFrame asli berdasarkan harga dan kategori untuk mendapatkan produk dengan harga terendah.
+
+9. **Menganalisis tren penjualan bulanan**:
+   ```python
+   monthly_trends = df.groupBy("Year", "Month") \
+       .agg(sum("Quantity").alias("TotalQuantity")) \
+       .orderBy("Year", "Month")
+   ```
+   Data dikelompokkan berdasarkan tahun dan bulan untuk menghitung total kuantitas penjualan setiap bulan, dan hasilnya diurutkan.
+
+10. **Membuat visualisasi total pendapatan berdasarkan kategori**:
+    ```python
+    import matplotlib.pyplot as plt
+
+    total_revenue_by_category = df.groupBy("Category") \
+        .agg(sum("TotalRevenue").alias("TotalRevenue")) \
+        .toPandas()
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(total_revenue_by_category['Category'], total_revenue_by_category['TotalRevenue'], color='skyblue')
+    plt.title('Total Revenue by Category')
+    plt.xlabel('Category')
+    plt.ylabel('Total Revenue')
+    plt.xticks(rotation=45)
+    plt.show()
+    ```
+    Pada bagian ini, DataFrame dikonversi menjadi `pandas DataFrame`, kemudian digunakan untuk membuat grafik batang total pendapatan per kategori menggunakan `matplotlib`.
+
+Sintaks kode ini secara keseluruhan digunakan untuk menganalisis data penjualan dengan Spark, menghitung total pendapatan, menemukan produk dengan harga terendah, menganalisis tren penjualan, serta menampilkan hasilnya secara visual.
