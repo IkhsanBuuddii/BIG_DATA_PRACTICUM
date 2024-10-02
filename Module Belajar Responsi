@@ -1,0 +1,48 @@
+# Langkah 1: Instal PySpark dan findspark
+!pip install pyspark findspark
+
+# Langkah 2: Menginisialisasi findspark dan mengimpor library yang diperlukan
+import findspark
+findspark.init()
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import split, col, min, max
+
+# Langkah 3: Inisialisasi Spark Session
+spark = SparkSession.builder \
+    .appName("Data Karyawan") \
+    .getOrCreate()
+
+# Langkah 4: Membuat DataFrame dengan data lengkap
+data = [
+    ("Alice", "Engineer", 60000, "21-08-2004"),
+    ("Bob", "Designer", 55000, "15-05-2010"),
+    ("Charlie", "Manager", 80000, "30-12-2022"),
+    ("David", "Analyst", 70000, "10-01-2018"),
+    ("Eve", "Developer", 75000, "22-07-2019")
+]
+
+columns = ["Nama", "Pekerjaan", "Gaji", "Tanggal"]
+df_karyawan = spark.createDataFrame(data, columns)
+
+# Langkah 5: Memisahkan kolom tanggal menjadi hari, bulan, dan tahun
+df_split = df_karyawan.withColumn("Hari", split(col("Tanggal"), "-").getItem(0)) \
+                      .withColumn("Bulan", split(col("Tanggal"), "-").getItem(1)) \
+                      .withColumn("Tahun", split(col("Tanggal"), "-").getItem(2))
+
+# Langkah 6: Menampilkan DataFrame yang telah dipisah
+df_split.show()
+
+# Langkah 7: Menghitung nilai minimum dan maksimum gaji
+min_gaji = df_split.select(min("Gaji")).collect()[0][0]
+max_gaji = df_split.select(max("Gaji")).collect()[0][0]
+
+print(f"Minimum Gaji: {min_gaji}")
+print(f"Maksimum Gaji: {max_gaji}")
+
+# Langkah 8: Mengonversi DataFrame PySpark ke Pandas DataFrame
+df_pandas = df_split.toPandas()
+print(df_pandas)
+
+# Langkah 9: Menutup Spark Session
+spark.stop()
