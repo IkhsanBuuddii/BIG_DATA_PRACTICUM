@@ -1,0 +1,51 @@
+TransactionID,ProductName,Category,Price,Quantity,Date
+1,Laptop,Electronics,1000,2,2024-11-01
+2,Smartphone,Electronics,700,1,2024-11-02
+3,T-Shirt,Apparel,15,3,2024-11-03
+4,Laptop,Electronics,1000,2,2024-11-01
+5,Blender,Home Appliances,250,1,2024-11-04
+6,Microwave,Home Appliances,300,1,2024-11-04
+7,T-Shirt,Apparel,15,,2024-11-05
+8,Blender,Home Appliances,250,1,2024-11-04
+9,Jeans,Apparel,50,1,2024-11-06
+10,,Electronics,200,1,2024-11-07
+11,Tablet,Electronics,400,2,2024-11-08
+12,Laptop,Electronics,1000,1,2024-11-01
+13,Coffee Maker,Home Appliances,150,1,2024-11-09
+14,Smartwatch,Electronics,200,,2024-11-10
+15,T-Shirt,Apparel,15,3,2024-11-11
+16,Headphones,Electronics,100,1,2024-11-12
+17,Blender,Home Appliances,250,1,2024-11-13
+18,Laptop,Electronics,1000,2,2024-11-01
+19,Smartphone,Electronics,700,1,2024-11-14
+20,Jeans,Apparel,50,1,2024-11-15
+21,Laptop,Electronics,1000,2,2024-11-16
+22,T-Shirt,Apparel,15,2,2024-11-17
+23,Blender,Home Appliances,250,1,2024-11-18
+24,Laptop,Electronics,1000,2,2024-11-19
+25,Coffee Maker,Home Appliances,150,,2024-11-20
+26,Microwave,Home Appliances,300,1,2024-11-21
+27,Smartwatch,Electronics,200,1,2024-11-22
+28,Jeans,Apparel,50,1,2024-11-23
+29,Laptop,Electronics,1000,2,2024-11-24
+30,T-Shirt,Apparel,15,3,2024-11-25
+31,Tablet,Electronics,400,1,2024-11-26
+32,Laptop,Electronics,1000,2,2024-11-27
+33,Blender,Home Appliances,250,1,2024-11-28
+34,Coffee Maker,Home Appliances,150,1,2024-11-29
+35,Jeans,Apparel,50,1,2024-11-30
+36,Smartphone,Electronics,700,,2024-12-01
+37,Smartwatch,Electronics,200,1,2024-12-02
+38,Laptop,Electronics,,2,2024-12-03
+39,Microwave,Home Appliances,300,1,2024-12-04
+40,Laptop,Electronics,1000,2,2024-12-05
+41,T-Shirt,Apparel,15,3,2024-12-06
+42,Blender,Home Appliances,250,1,2024-12-07
+43,Jeans,Apparel,50,,2024-12-08
+44,Laptop,Electronics,1000,2,2024-12-09
+45,Smartphone,Electronics,700,1,2024-12-10
+46,T-Shirt,Apparel,15,3,2024-12-11
+47,Microwave,Home Appliances,300,1,2024-12-12
+48,Coffee Maker,Home Appliances,150,1,2024-12-13
+49,Tablet,Electronics,400,2,2024-12-14
+50,Jeans,Apparel,50,1,2024-12-15
